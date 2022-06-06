@@ -4,10 +4,11 @@ import com.github.youssf.cities.entities.Country;
 import com.github.youssf.cities.repositories.ICountryRepository;
 import com.github.youssf.cities.services.interfaces.ICountryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class CountryService implements ICountryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Country> findAll() {
-        return countryRepository.findAll();
+    public Page<Country> findAll(Pageable pageable) {
+        return countryRepository.findAll(pageable);
     }
 
 }
