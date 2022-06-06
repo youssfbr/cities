@@ -1,6 +1,7 @@
 package com.github.youssf.cities.services;
 
-import com.github.youssf.cities.entities.Country;
+import com.github.youssf.cities.api.dtos.CountryResponseDTO;
+import com.github.youssf.cities.api.mappers.CountryMapper;
 import com.github.youssf.cities.repositories.ICountryRepository;
 import com.github.youssf.cities.services.interfaces.ICountryService;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +16,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class CountryService implements ICountryService {
 
     private final ICountryRepository countryRepository;
+    private final CountryMapper countryMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Country> findAll(Pageable pageable) {
-        return countryRepository.findAll(pageable);
+    public Page<CountryResponseDTO> findAll(Pageable pageable) {
+        return countryRepository
+                .findAll(pageable)
+                .map(countryMapper::toDTO);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CountryResponseDTO findById(Long id) {
+        return countryRepository
+                .findById(id)
+                .map(countryMapper::toDTO)
+                .orElseThrow();
     }
 
 }
